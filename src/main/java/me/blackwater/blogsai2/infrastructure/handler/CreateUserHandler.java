@@ -2,18 +2,18 @@ package me.blackwater.blogsai2.infrastructure.handler;
 
 import lombok.RequiredArgsConstructor;
 import me.blackwater.blogsai2.api.enums.HandlerType;
+import me.blackwater.blogsai2.api.handler.CreateHandler;
 import me.blackwater.blogsai2.api.stereotype.Handler;
 import me.blackwater.blogsai2.domain.model.Email;
 import me.blackwater.blogsai2.domain.model.Phone;
 import me.blackwater.blogsai2.domain.model.User;
 import me.blackwater.blogsai2.domain.exception.UserAlreadyExistException;
-import me.blackwater.blogsai2.domain.handler.CreateUserHandler;
 import me.blackwater.blogsai2.domain.repository.UserRepository;
 import me.blackwater.blogsai2.application.web.request.CreateUserRequest;
 
 @RequiredArgsConstructor
 @Handler(name = "create user", handlerType = HandlerType.CREATE, transactional = true)
-class CreateUserHandlerImpl implements CreateUserHandler {
+class CreateUserHandler implements CreateHandler<User, CreateUserRequest> {
 
     private final UserRepository userRepository;
 
@@ -32,5 +32,10 @@ class CreateUserHandlerImpl implements CreateUserHandler {
         final User newUser  = new User(dto.username(),dto.password(),true,false,new Phone(dto.phone(),"+48"),new Email(dto.email()));
 
         return userRepository.save(newUser);
+    }
+
+    @Override
+    public boolean trace() {
+        return true;
     }
 }

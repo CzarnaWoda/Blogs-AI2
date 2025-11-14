@@ -1,4 +1,4 @@
-package me.blackwater.blogsai2.domain.data;
+package me.blackwater.blogsai2.domain.model;
 
 
 import jakarta.persistence.Column;

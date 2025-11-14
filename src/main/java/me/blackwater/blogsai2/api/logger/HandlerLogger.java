@@ -1,4 +1,4 @@
-package me.blackwater.blogsai2.infrastructure.logger;
+package me.blackwater.blogsai2.api.logger;
 
 
 import lombok.extern.log4j.Log4j2;

@@ -1,4 +1,4 @@
-package me.blackwater.blogsai2.infrastructure.config;
+package me.blackwater.blogsai2.api.config;
 
 import lombok.RequiredArgsConstructor;
 import me.blackwater.blogsai2.api.stereotype.Handler;
@@ -40,7 +40,6 @@ public class HandlerBeanPostProcessor implements BeanPostProcessor {
         ProxyFactory proxyFactory = new ProxyFactory(target);
         proxyFactory.setProxyTargetClass(true); // CGLIB proxy
 
-        // Dodaj transaction interceptor który obsługuje WSZYSTKIE metody
         TransactionInterceptor transactionInterceptor = new TransactionInterceptor(
                 transactionManager,
                 new MatchAlwaysTransactionAttributeSource()

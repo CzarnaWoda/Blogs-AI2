@@ -1,4 +1,4 @@
-package me.blackwater.blogsai2.api.util;
+package me.blackwater.blogsai2.infrastructure.util;
 
 public class ValidationUtil {
     public static final String EMAIL_REGEX =

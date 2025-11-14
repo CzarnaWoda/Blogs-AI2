@@ -1,4 +1,4 @@
-package me.blackwater.blogsai2.domain.request;
+package me.blackwater.blogsai2.application.web.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

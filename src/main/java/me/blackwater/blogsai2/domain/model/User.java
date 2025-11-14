@@ -1,8 +1,9 @@
-package me.blackwater.blogsai2.domain.data;
+package me.blackwater.blogsai2.domain.model;
 
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import java.util.Set;
 @Entity(name = "user")
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class User {
 
     @Id

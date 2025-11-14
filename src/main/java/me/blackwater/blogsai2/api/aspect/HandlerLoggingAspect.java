@@ -1,4 +1,4 @@
-package me.blackwater.blogsai2.infrastructure.aspect;
+package me.blackwater.blogsai2.api.aspect;
 
 import me.blackwater.blogsai2.api.handler.*;
 import org.aspectj.lang.ProceedingJoinPoint;

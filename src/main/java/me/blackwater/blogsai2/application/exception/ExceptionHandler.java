@@ -1,4 +1,8 @@
 package me.blackwater.blogsai2.application.exception;
 
-public class ExceptionHandler {
+import org.springframework.web.bind.annotation.ControllerAdvice;
+
+@ControllerAdvice
+class ExceptionHandler {
+
 }

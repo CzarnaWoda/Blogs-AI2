@@ -3,11 +3,13 @@ package me.blackwater.blogsai2.domain.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=false)
+@Getter
 public class UserRole {
 
     @Column(name = "role")

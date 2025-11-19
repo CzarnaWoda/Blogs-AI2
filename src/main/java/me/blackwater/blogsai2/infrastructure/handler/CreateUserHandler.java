@@ -10,12 +10,14 @@ import me.blackwater.blogsai2.domain.model.User;
 import me.blackwater.blogsai2.domain.exception.UserAlreadyExistException;
 import me.blackwater.blogsai2.domain.repository.UserRepository;
 import me.blackwater.blogsai2.application.web.request.CreateUserRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RequiredArgsConstructor
 @Handler(name = "create user", handlerType = HandlerType.CREATE, transactional = true)
 class CreateUserHandler implements CreateHandler<User, CreateUserRequest> {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User execute(CreateUserRequest dto) {
@@ -29,7 +31,7 @@ class CreateUserHandler implements CreateHandler<User, CreateUserRequest> {
             throw new UserAlreadyExistException("User with that phone number already exists");
         }
         //TODO encode passwords
-        final User newUser  = new User(dto.username(),dto.password(),true,false,new Phone(dto.phone(),"+48"),new Email(dto.email()));
+        final User newUser  = new User(dto.username(),passwordEncoder.encode(dto.password()),true,false,new Phone(dto.phone(),"+48"),new Email(dto.email()));
 
         return userRepository.save(newUser);
     }

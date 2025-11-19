@@ -2,17 +2,21 @@ package me.blackwater.blogsai2.domain.model;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.time.Instant;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-@Entity(name = "user")
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity(name = "users")
+@Table(name = "users")
 @Getter
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -26,6 +30,10 @@ public class User {
     private boolean enabled;
 
     private boolean blocked;
+
+    private Instant createdAt;
+
+    private Instant updatedAt;
 
     @Embedded
     private Phone phone;
@@ -46,6 +54,8 @@ public class User {
         this.blocked = blocked;
         this.phone = phone;
         this.email = email;
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
 
         addRole("USER");
     }
@@ -57,6 +67,8 @@ public class User {
         this.blocked = blocked;
         this.phone = phone;
         this.email = email;
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
 
         if(admin){
             addRole("ADMIN");
@@ -70,7 +82,24 @@ public class User {
         addRole("USER");
     }
 
+
     public void addRole(String role){
         this.roles.add(new UserRole(role));
+    }
+
+    public void update(String countryCode, String phoneNumber, String userName){
+        this.phone = new Phone(phoneNumber, countryCode);
+        this.userName = userName;
+
+        this.updatedAt = Instant.now();
+    }
+
+    public void changePassword(String newPassword){
+        this.password = newPassword;
+        this.updatedAt = Instant.now();
+    }
+
+    public Collection<GrantedAuthority> getAuthorities() {
+        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getValue())).collect(Collectors.toSet());
     }
 }

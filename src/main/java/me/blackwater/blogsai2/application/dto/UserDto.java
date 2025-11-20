@@ -8,8 +8,8 @@ import java.util.Set;
 
 public record UserDto(
         String userName,
-        Phone phone,
-        Email email,
-        Set<UserRole> userRoles
+        String phone,
+        String email,
+        Set<String> userRoles
 ) {
 }

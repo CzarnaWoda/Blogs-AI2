@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RequiredArgsConstructor
 @Handler(name = "create user", handlerType = HandlerType.CREATE, transactional = true)
-class CreateUserHandler implements CreateHandler<User, CreateUserRequest> {
+public class CreateUserHandler implements CreateHandler<User, CreateUserRequest> {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

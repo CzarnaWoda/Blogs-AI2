@@ -48,7 +48,12 @@ public class SecurityConfiguration {
         }));
 
         security.authorizeHttpRequests(auth ->
-                auth.requestMatchers(HttpMethod.GET,"/swagger-ui.html").permitAll()
+                auth
+                        .requestMatchers(HttpMethod.GET,"/swagger-ui.html").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/v1/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/authorities").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/changePassword").authenticated()
         )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).httpBasic(Customizer.withDefaults())

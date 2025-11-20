@@ -9,10 +9,10 @@ public record Phone(@Column(name = "phone_number", nullable = false) String valu
                     @Column(name = "phone_country_code", nullable = false) String countryCode) {
 
     public Phone {
-        if (ValidationUtil.isValidCountryCode(countryCode)) {
+        if (!ValidationUtil.isValidCountryCode(countryCode)) {
             throw new InvalidCountryCodeException("Invalid country code: " + countryCode);
         }
-        if (ValidationUtil.isValidPhoneNumber(value)) {
+        if (!ValidationUtil.isValidPhoneNumber(value)) {
             throw new InvalidPhoneNumberException("Invalid phone number: " + value);
         }
 

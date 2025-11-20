@@ -35,19 +35,15 @@ public class Section {
 
     private boolean active;
 
-    public Section(String title, String description, int views, int clicks, String creator, Instant createdAt, Instant updatedAt, String type) {
+    public Section(String title, String description, String creator, String type) {
         this.title = title;
         this.description = description;
-        this.views = views;
-        this.clicks = clicks;
+        this.views = 0;
+        this.clicks = 0;
         this.creator = creator;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.type = type;
-
         this.createdAt = Instant.now();
-
         this.updatedAt = Instant.now();
+        this.type = type;
     }
 
     public void active(){

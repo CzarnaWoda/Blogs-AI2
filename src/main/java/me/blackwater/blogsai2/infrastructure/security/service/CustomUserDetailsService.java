@@ -2,7 +2,7 @@ package me.blackwater.blogsai2.infrastructure.security.service;
 
 import lombok.RequiredArgsConstructor;
 import me.blackwater.blogsai2.domain.model.User;
-import me.blackwater.blogsai2.infrastructure.handler.GetUserByEmailHandler;
+import me.blackwater.blogsai2.infrastructure.handler.user.GetUserByEmailHandler;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

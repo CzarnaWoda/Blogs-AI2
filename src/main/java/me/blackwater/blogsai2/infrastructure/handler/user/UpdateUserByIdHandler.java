@@ -1,4 +1,4 @@
-package me.blackwater.blogsai2.infrastructure.handler;
+package me.blackwater.blogsai2.infrastructure.handler.user;
 
 
 import lombok.RequiredArgsConstructor;

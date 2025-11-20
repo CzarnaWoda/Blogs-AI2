@@ -2,7 +2,6 @@ package me.blackwater.blogsai2.infrastructure.security.config;
 
 import lombok.RequiredArgsConstructor;
 import me.blackwater.blogsai2.infrastructure.security.filter.JwtAuthenticationFilter;
-import me.blackwater.blogsai2.infrastructure.security.properties.RsaKeyProperties;
 import me.blackwater.blogsai2.infrastructure.security.provider.AccountAuthenticationProvider;
 import me.blackwater.blogsai2.infrastructure.security.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +25,7 @@ import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
-public class SecurityConfiguration {
+class SecurityConfiguration {
 
     private final FrontendProperties frontendProperties;
     private final CustomUserDetailsService detailsService;
@@ -54,6 +53,11 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST,"/api/v1/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auth/authorities").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/changePassword").authenticated()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/api-docs/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
         )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).httpBasic(Customizer.withDefaults())

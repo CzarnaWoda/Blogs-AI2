@@ -15,6 +15,6 @@ public interface SectionJpaRepository extends JpaRepository<Section,Long> {
 
     Optional<Section> findByTitle(String title);
 
-    Optional<Section> findByType(String type);
+    Page<Section> findByType(Pageable pageable, String type);
 
 }

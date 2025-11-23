@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.blackwater.blogsai2.api.enums.HandlerType;
 import me.blackwater.blogsai2.api.handler.GetHandler;
 import me.blackwater.blogsai2.api.stereotype.Handler;
-import me.blackwater.blogsai2.application.web.request.PageRequest;
+import me.blackwater.blogsai2.application.web.request.GetSectionByTypeRequest;
 import me.blackwater.blogsai2.domain.model.Section;
 import me.blackwater.blogsai2.domain.repository.SectionRepository;
 import org.springframework.data.domain.Page;
@@ -12,14 +12,16 @@ import org.springframework.data.domain.Page;
 import java.time.Duration;
 import java.time.Instant;
 
+@Handler(handlerType = HandlerType.GET, name = "Sections by type", transactional = true)
 @RequiredArgsConstructor
-@Handler(handlerType = HandlerType.GET, name = "Get section page")
-public class GetSectionPageHandler implements GetHandler<Page<Section>, PageRequest> {
+public class GetSectionsByTypeHandler implements GetHandler<Page<Section>, GetSectionByTypeRequest> {
 
     private final SectionRepository sectionRepository;
+
     @Override
-    public Page<Section> execute(PageRequest pageRequest) {
-        Page<Section> sections = sectionRepository.findAll(pageRequest.page(), pageRequest.size());
+    public Page<Section> execute(GetSectionByTypeRequest getSectionByTypeRequest) {
+        final Page<Section> sections = sectionRepository.findByType(getSectionByTypeRequest.type(),getSectionByTypeRequest.page(), getSectionByTypeRequest.size());
+
 
         sections.getContent().forEach(section -> {
             section.addView();

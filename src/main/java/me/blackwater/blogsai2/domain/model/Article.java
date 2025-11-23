@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "article")
 @Getter
 @Table(name = "blog_articles")
 @NoArgsConstructor
@@ -21,7 +21,9 @@ public class Article {
     private long id;
 
     private String title;
-    private String author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private User author;
     @Column(columnDefinition = "TEXT")
     private String content;
 
@@ -41,7 +43,7 @@ public class Article {
     private Instant updatedAt;
 
 
-    public Article(String title, String author, String content, Section section) {
+    public Article(String title, User author, String content, Section section) {
         this.title = title;
         this.author = author;
         this.content = content;

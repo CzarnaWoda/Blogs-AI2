@@ -4,12 +4,11 @@ package me.blackwater.blogsai2.domain.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import me.blackwater.blogsai2.domain.exception.ObjectRequirementsException;
 
 import java.time.Instant;
 
-@Entity
+@Entity(name = "comment")
 @Table(name = "article_comments")
 @Getter
 @NoArgsConstructor

@@ -45,7 +45,7 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(BAD_REQUEST).body(HttpResponse.builder()
                 .timeStamp(TimeUtil.getCurrentTimeWithFormat())
                 .reason("Field: " + Objects.requireNonNull(e.getBindingResult().getFieldError()).getField() + " is not correct")
-                .message(Objects.requireNonNull(e.getBindingResult().getFieldError()).getField().toUpperCase() + " " +Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage())
+                .message(Objects.requireNonNull(e.getBindingResult().getFieldError()).getField().toUpperCase() + " " + Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage())
                 .httpStatus(BAD_REQUEST)
                 .statusCode(BAD_REQUEST.value())
                 .build());

@@ -11,6 +11,6 @@ public interface SectionRepository {
     Optional<Section> findById(long id);
     Section save(Section section);
     Optional<Section> findByTitle(String title);
-    Optional<Section> findByType(String type);
     Page<Section> findAll(int page, int size);
+    Page<Section> findByType(String type, int page, int size);
 }

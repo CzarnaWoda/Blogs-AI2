@@ -3,9 +3,9 @@ package me.blackwater.blogsai2.application.web.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateSectionRequest(
-        @NotNull @NotBlank
-        String creator,
+public record UpdateSectionRequest(
+        @NotNull
+        long id,
         @NotNull @NotBlank
         String title,
         @NotNull @NotBlank

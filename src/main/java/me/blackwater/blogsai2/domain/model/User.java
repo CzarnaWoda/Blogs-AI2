@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Entity(name = "users")
+@Entity(name = "user")
 @Table(name = "users")
 @Getter
 @NoArgsConstructor
@@ -44,7 +44,7 @@ public class User {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column
-    private Set<UserRole> roles = new HashSet<>();
+    private final Set<UserRole> roles = new HashSet<>();
 
 
     public User(String userName, String password, boolean enabled, boolean blocked, Phone phone, Email email) {

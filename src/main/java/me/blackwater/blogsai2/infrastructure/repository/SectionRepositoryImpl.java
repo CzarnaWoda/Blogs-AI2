@@ -31,13 +31,14 @@ class SectionRepositoryImpl implements SectionRepository {
         return sectionJpaRepository.findByTitle(title);
     }
 
-    @Override
-    public Optional<Section> findByType(String type) {
-        return sectionJpaRepository.findByType(type);
-    }
 
     @Override
     public Page<Section> findAll(int page, int size) {
         return sectionJpaRepository.findAll(PageRequest.of(page, size, Sort.Direction.ASC,"createdAt"));
+    }
+
+    @Override
+    public Page<Section> findByType(String type, int page, int size) {
+        return sectionJpaRepository.findByType(PageRequest.of(page,size, Sort.Direction.ASC,"createdAt"), type);
     }
 }

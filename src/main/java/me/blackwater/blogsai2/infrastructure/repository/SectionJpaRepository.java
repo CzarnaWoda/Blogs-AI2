@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface SectionJpaRepository extends JpaRepository<Section,Long> {
+interface SectionJpaRepository extends JpaRepository<Section,Long> {
 
     Optional<Section> findById(long id);
 

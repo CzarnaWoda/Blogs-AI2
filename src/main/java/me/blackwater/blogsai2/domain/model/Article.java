@@ -53,21 +53,26 @@ public class Article {
         this.updatedAt = Instant.now();
     }
 
-    public void addView(){
+    public void updateTime(){
         this.updatedAt = Instant.now();
+    }
+
+    public void addView(){
         this.views += 1;
     }
     public void addLike(){
-        this.updatedAt = Instant.now();
         this.likes += 1;
+        this.updatedAt = Instant.now();
     }
 
     public void block(){
         this.blocked = true;
+        this.updatedAt = Instant.now();
     }
 
     public void unblock(){
         this.blocked = false;
+        this.updatedAt = Instant.now();
     }
     public void addComment(Comment comment){
         this.updatedAt = Instant.now();

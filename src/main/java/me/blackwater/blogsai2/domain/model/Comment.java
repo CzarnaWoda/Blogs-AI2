@@ -9,6 +9,7 @@ import me.blackwater.blogsai2.domain.exception.ObjectRequirementsException;
 import java.time.Instant;
 
 @Entity(name = "comment")
+@NamedEntityGraph(name = "Comment.author", attributeNodes = @NamedAttributeNode("author"))
 @Table(name = "article_comments")
 @Getter
 @NoArgsConstructor
@@ -18,7 +19,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private User author;
     @Column(columnDefinition = "TEXT")
     private String value;
 
@@ -35,7 +38,7 @@ public class Comment {
     private Article article;
 
 
-    public Comment(String author, String value, int views, int likes) {
+    public Comment(User author, String value, int views, int likes) {
         this.author = author;
         this.value = value;
         this.createdAt = Instant.now();

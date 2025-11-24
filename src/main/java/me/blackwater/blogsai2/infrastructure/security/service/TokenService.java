@@ -19,8 +19,8 @@ public class TokenService {
     private final JwtDecoder jwtDecoder;
 
 
-    public boolean hasAuthority(String refreshToken, String authority){
-        final Jwt decodedToken = jwtDecoder.decode(refreshToken);
+    public boolean hasAuthority(String token, String authority){
+        final Jwt decodedToken = jwtDecoder.decode(token);
 
         final List<String> authorities = decodedToken.getClaimAsStringList("authorities");
 

@@ -28,7 +28,6 @@ public class Comment {
     private Instant createdAt;
 
 
-    private int views;
     private int likes;
 
     private boolean disabled = true;
@@ -38,16 +37,18 @@ public class Comment {
     private Article article;
 
 
-    public Comment(User author, String value, int views, int likes) {
+    public Comment(User author, String value) {
         this.author = author;
         this.value = value;
         this.createdAt = Instant.now();
-        this.views = views;
-        this.likes = likes;
+        this.likes = 0;
     }
 
     public void disable() {
         this.disabled = true;
+    }
+    public void addLike(){
+        this.likes++;
     }
     public void enable(Article article){
         this.article = article;

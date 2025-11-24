@@ -3,6 +3,7 @@ package me.blackwater.blogsai2.infrastructure.repository;
 import lombok.RequiredArgsConstructor;
 import me.blackwater.blogsai2.domain.exception.ObjectRequirementsException;
 import me.blackwater.blogsai2.domain.model.Article;
+import me.blackwater.blogsai2.domain.model.Comment;
 import me.blackwater.blogsai2.domain.repository.ArticleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

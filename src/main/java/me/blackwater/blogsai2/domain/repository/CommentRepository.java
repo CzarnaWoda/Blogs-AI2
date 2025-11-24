@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface CommentRepository {
 
     Optional<Comment> findById(long id);
-    Comment save(Comment comment);
     Page<Comment> findByArticleId(int page, int size, long articleId);
     Page<Comment> findByAuthorId(int page, int size, long authorId);
     Page<Comment> findByArticleIdWithAuthor(int page, int size, long articleId);
+    Comment save(Comment comment);
 
 }

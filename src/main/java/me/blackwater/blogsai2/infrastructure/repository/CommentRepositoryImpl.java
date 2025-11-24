@@ -19,11 +19,6 @@ class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public Comment save(Comment comment) {
-        return commentJpaRepository.save(comment);
-    }
-
-    @Override
     public Page<Comment> findByArticleId(int page, int size, long articleId) {
         return commentJpaRepository.findByArticleId(articleId, PageRequest.of(page, size));
     }
@@ -36,5 +31,10 @@ class CommentRepositoryImpl implements CommentRepository {
     @Override
     public Page<Comment> findByArticleIdWithAuthor(int page, int size, long articleId) {
         return commentJpaRepository.findByArticleId(articleId, PageRequest.of(page, size));
+    }
+
+    @Override
+    public Comment save(Comment comment) {
+        return commentJpaRepository.save(comment);
     }
 }

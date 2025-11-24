@@ -1,6 +1,7 @@
 package me.blackwater.blogsai2.domain.repository;
 
 import me.blackwater.blogsai2.domain.model.Article;
+import me.blackwater.blogsai2.domain.model.Comment;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

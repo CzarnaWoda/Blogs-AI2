@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class ArticleDtoMapper {
 
     public ArticleDto toDto(Article article) {
-        return new ArticleDto(article.getTitle(),article.getContent(),article.getViews(),article.getLikes());
+        return new ArticleDto(article.getId(),article.getTitle(),article.getContent(),article.getViews(),article.getLikes());
     }
 }

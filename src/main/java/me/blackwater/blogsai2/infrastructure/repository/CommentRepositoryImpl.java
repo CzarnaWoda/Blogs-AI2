@@ -21,7 +21,7 @@ class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Page<Comment> findByArticleId(int page, int size, long articleId) {
-        return commentJpaRepository.findByArticleId(articleId, PageRequest.of(page, size));
+        return commentJpaRepository.findByArticleIdAndDisabled(articleId,false, PageRequest.of(page, size));
     }
 
     @Override
@@ -31,7 +31,7 @@ class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Page<Comment> findByArticleIdWithAuthor(int page, int size, long articleId) {
-        return commentJpaRepository.findByArticleId(articleId, PageRequest.of(page, size, Sort.Direction.ASC,"createdAt"));
+        return commentJpaRepository.findByArticleIdAndDisabled(articleId,false, PageRequest.of(page, size, Sort.Direction.ASC,"createdAt"));
     }
 
     @Override

@@ -15,22 +15,24 @@ import me.blackwater.blogsai2.infrastructure.handler.user.GetUserByUserNameHandl
 
 @Handler(handlerType = HandlerType.CREATE, name = "Create comment by articleId")
 @RequiredArgsConstructor
-public class CreateCommentByArticleIdHandler implements CreateHandler<Article, CreateCommentRequest> {
+public class CreateCommentByArticleIdHandler implements CreateHandler<Comment, CreateCommentRequest> {
 
     private final ArticleRepository articleRepository;
     private final GetArticleByIdHandler getArticleByIdHandler;
     private final GetUserByUserNameHandler getUserByUserNameHandler;
 
     @Override
-    public Article execute(CreateCommentRequest dto) {
+    public Comment execute(CreateCommentRequest dto) {
         final Article article = getArticleByIdHandler.execute(dto.articleId());
         if(article.isBlocked()){
             throw new IllegalActionException("Article is blocked!");
         }
         final User author = getUserByUserNameHandler.execute(dto.authorUserName());
 
-        article.addComment(new Comment(author,dto.value()));
+        final Comment comment = article.addComment(new Comment(author,dto.value()));
 
-        return articleRepository.save(article);
+        articleRepository.save(article);
+
+        return comment;
     }
 }

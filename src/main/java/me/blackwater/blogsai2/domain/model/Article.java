@@ -74,12 +74,14 @@ public class Article {
         this.blocked = false;
         this.updatedAt = Instant.now();
     }
-    public void addComment(Comment comment){
+    public Comment addComment(Comment comment){
         this.updatedAt = Instant.now();
 
         comment.enable(this);
 
         this.comments.add(comment);
+
+        return this.getComments().stream().filter(c -> c.getId() == comment.getId()).findFirst().orElse(null);
     }
 
     public void removeComment(Comment comment){

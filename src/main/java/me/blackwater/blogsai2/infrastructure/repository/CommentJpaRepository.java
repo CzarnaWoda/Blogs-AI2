@@ -12,5 +12,5 @@ interface CommentJpaRepository extends JpaRepository<Comment, Long> {
     Page<Comment> findByAuthorId(long authorId, Pageable pageable);
 
     @EntityGraph("Comment.author")
-    Page<Comment> findByArticleId(long articleId, Pageable pageable);
+    Page<Comment> findByArticleIdAndDisabled(long articleId, boolean disabled, Pageable pageable);
 }

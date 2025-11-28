@@ -19,7 +19,7 @@ import org.springframework.security.core.Authentication;
         name = "Authentication",
         description = "Endpoints for user authentication and account management"
 )
-public interface AuthController {
+interface AuthController {
 
     @Operation(
             summary = "User login",

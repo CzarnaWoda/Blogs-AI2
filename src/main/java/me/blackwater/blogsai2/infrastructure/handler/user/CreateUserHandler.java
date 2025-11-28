@@ -30,7 +30,6 @@ public class CreateUserHandler implements CreateHandler<User, CreateUserRequest>
         if(userRepository.findByPhoneNumber(dto.phone()).isPresent()){
             throw new UserAlreadyExistException("User with that phone number already exists");
         }
-        //TODO encode passwords
         final User newUser  = new User(dto.username(),passwordEncoder.encode(dto.password()),true,false,new Phone(dto.phone(),"+48"),new Email(dto.email()));
 
         return userRepository.save(newUser);

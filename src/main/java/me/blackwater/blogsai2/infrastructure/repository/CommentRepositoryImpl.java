@@ -5,6 +5,7 @@ import me.blackwater.blogsai2.domain.model.Comment;
 import me.blackwater.blogsai2.domain.repository.CommentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -30,7 +31,7 @@ class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Page<Comment> findByArticleIdWithAuthor(int page, int size, long articleId) {
-        return commentJpaRepository.findByArticleId(articleId, PageRequest.of(page, size));
+        return commentJpaRepository.findByArticleId(articleId, PageRequest.of(page, size, Sort.Direction.ASC,"createdAt"));
     }
 
     @Override

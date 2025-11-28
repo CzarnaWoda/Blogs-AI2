@@ -14,7 +14,7 @@ import me.blackwater.blogsai2.application.web.request.UpdateSectionRequest;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Section Management", description = "API endpoints for managing blog sections")
-public interface SectionController {
+interface SectionController {
 
     @Operation(
             summary = "Get sections by type with pagination",

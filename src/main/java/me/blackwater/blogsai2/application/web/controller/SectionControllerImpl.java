@@ -24,7 +24,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/api/v1/section")
 @RequiredArgsConstructor
-public class SectionControllerImpl implements SectionController{
+class SectionControllerImpl implements SectionController{
 
     private final GetSectionsByTypeHandler getSectionsByTypeHandler;
     private final GetSectionByTitleHandler getSectionByTitleHandler;

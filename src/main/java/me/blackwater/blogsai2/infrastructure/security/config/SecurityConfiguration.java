@@ -58,6 +58,18 @@ class SecurityConfiguration {
                                 "/api-docs/**",
                                 "/swagger-ui.html"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/section/sections").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/section/section/title/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/section/sections/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/section").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/section").hasAuthority("MODERATOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/section/section/id/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/article").hasAuthority("MODERATOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/article/title/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/article/id/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/article/author/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/article/section/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/article/articles").permitAll()
         )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).httpBasic(Customizer.withDefaults())

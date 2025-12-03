@@ -8,9 +8,13 @@ import me.blackwater.blogsai2.application.mapper.ArticleDtoMapper;
 import me.blackwater.blogsai2.application.web.request.CreateArticleRequest;
 import me.blackwater.blogsai2.application.web.request.PageSortOrderRequest;
 import me.blackwater.blogsai2.domain.model.Article;
+import me.blackwater.blogsai2.domain.model.User;
 import me.blackwater.blogsai2.infrastructure.handler.article.*;
+import me.blackwater.blogsai2.infrastructure.handler.user.GetUserByEmailHandler;
+import me.blackwater.blogsai2.infrastructure.handler.user.GetUserByUserNameHandler;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,11 +33,12 @@ class ArticleControllerImpl implements ArticleController{
     private final GetArticleByAuthorIdHandler getArticleByAuthorIdHandler;
     private final GetArticleBySectionIdHandler getArticleBySectionIdHandler;
     private final GetArticlePageSortedOrderedHandler getArticlePageSortedOrderedHandler;
+    private final GetUserByEmailHandler getUserByEmailHandler;
     private final ArticleDtoMapper articleDtoMapper;
 
     @Override
     @PostMapping
-    public ResponseEntity<HttpResponse> create(@RequestBody @Valid CreateArticleRequest request) {
+    public ResponseEntity<HttpResponse> create(@RequestBody @Valid CreateArticleRequest request, Authentication authentication) {
         final Article article = createArticleHandler.execute(request);
 
 

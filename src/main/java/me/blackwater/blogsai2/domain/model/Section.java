@@ -43,6 +43,7 @@ public class Section {
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
         this.type = type;
+        this.active = true;
     }
 
     public void update(String title, String description, String type){

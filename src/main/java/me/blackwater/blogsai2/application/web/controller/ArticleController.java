@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import me.blackwater.blogsai2.api.data.HttpResponse;
 import me.blackwater.blogsai2.application.web.request.CreateArticleRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 
 @Tag(name = "Article Management", description = "API endpoints for managing blog articles - CRUD operations, filtering and pagination")
 public interface ArticleController {
@@ -109,7 +110,8 @@ public interface ArticleController {
                             )
                     )
             )
-            CreateArticleRequest request
+            CreateArticleRequest request,
+            Authentication authentication
     );
 
     @Operation(

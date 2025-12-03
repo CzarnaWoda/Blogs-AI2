@@ -1,7 +1,7 @@
 package me.blackwater.blogsai2.application.web.request;
 
 public record UpdateUserRequest(
-        long id,
+        Long id,
         String userName,
         String countryCode,
         String phoneNumber

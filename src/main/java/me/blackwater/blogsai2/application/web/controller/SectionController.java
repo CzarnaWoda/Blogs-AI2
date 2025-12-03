@@ -12,6 +12,7 @@ import me.blackwater.blogsai2.api.data.HttpResponse;
 import me.blackwater.blogsai2.application.web.request.CreateSectionRequest;
 import me.blackwater.blogsai2.application.web.request.UpdateSectionRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 
 @Tag(name = "Section Management", description = "API endpoints for managing blog sections")
 interface SectionController {
@@ -218,7 +219,8 @@ interface SectionController {
                             )
                     )
             )
-            CreateSectionRequest request
+            CreateSectionRequest request,
+            Authentication authentication
     );
 
     @Operation(

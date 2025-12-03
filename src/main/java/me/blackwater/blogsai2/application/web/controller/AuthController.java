@@ -265,4 +265,6 @@ interface AuthController {
             @io.swagger.v3.oas.annotations.Parameter(hidden = true)
             Authentication authentication
     );
+
+    ResponseEntity<HttpResponse> me(Authentication authentication);
 }

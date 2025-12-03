@@ -109,4 +109,21 @@ class AuthControllerImpl implements AuthController{
                         .build());
 
     }
+
+    @Override
+    @GetMapping("/me")
+    public ResponseEntity<HttpResponse> me(Authentication authentication) {
+        final User user = getUserByEmailHandler.execute(authentication.getName());
+
+
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .message("User information")
+                        .reason("User information sent by User")
+                        .data(Map.of("user", userDtoMapper.toDto(user)))
+                        .build());
+    }
 }

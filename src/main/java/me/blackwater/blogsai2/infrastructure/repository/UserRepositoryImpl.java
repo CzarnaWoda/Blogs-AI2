@@ -6,6 +6,9 @@ import me.blackwater.blogsai2.domain.model.Email;
 import me.blackwater.blogsai2.domain.model.Phone;
 import me.blackwater.blogsai2.domain.model.User;
 import me.blackwater.blogsai2.domain.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -39,5 +42,10 @@ class UserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         return userJpaRepository.save(user);
+    }
+
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return userJpaRepository.findAll(pageable);
     }
 }

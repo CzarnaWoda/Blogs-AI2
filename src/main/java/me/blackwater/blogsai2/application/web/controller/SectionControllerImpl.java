@@ -10,9 +10,12 @@ import me.blackwater.blogsai2.application.web.request.GetSectionByTypeRequest;
 import me.blackwater.blogsai2.application.web.request.PageRequest;
 import me.blackwater.blogsai2.application.web.request.UpdateSectionRequest;
 import me.blackwater.blogsai2.domain.model.Section;
+import me.blackwater.blogsai2.domain.model.User;
 import me.blackwater.blogsai2.infrastructure.handler.section.*;
+import me.blackwater.blogsai2.infrastructure.handler.user.GetUserByEmailHandler;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -32,6 +35,7 @@ class SectionControllerImpl implements SectionController{
     private final CreateSectionHandler createSectionHandler;
     private final SectionDtoMapper sectionDtoMapper;
     private final GetSectionByIdHandler getSectionByIdHandler;
+    private final GetUserByEmailHandler getUserByEmailHandler;
     private final UpdateSectionByIdHandler updateSectionByIdHandler;
 
     @Override
@@ -80,8 +84,10 @@ class SectionControllerImpl implements SectionController{
 
     @Override
     @PostMapping()
-    public ResponseEntity<HttpResponse> createSections(@RequestBody CreateSectionRequest request) {
-        final SectionDto sectionDto = sectionDtoMapper.toDto(createSectionHandler.execute(request));
+    public ResponseEntity<HttpResponse> createSections(@RequestBody CreateSectionRequest request, Authentication authentication) {
+        final User user = getUserByEmailHandler.execute(authentication.getName());
+
+        final SectionDto sectionDto = sectionDtoMapper.toDto(createSectionHandler.execute(new CreateSectionRequest(user.getUserName(),request.title(),request.description(),request.type())));
 
         return ResponseEntity.status(CREATED).body(HttpResponse.builder()
                 .statusCode(CREATED.value())

@@ -3,6 +3,7 @@ package me.blackwater.blogsai2.infrastructure.repository;
 import me.blackwater.blogsai2.domain.model.Section;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +18,6 @@ interface SectionJpaRepository extends JpaRepository<Section,Long> {
 
     Page<Section> findByType(Pageable pageable, String type);
 
+    @EntityGraph("section.creator")
+    Page<Section> findAll(Pageable pageable);
 }

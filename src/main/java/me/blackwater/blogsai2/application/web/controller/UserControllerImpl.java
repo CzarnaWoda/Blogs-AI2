@@ -25,6 +25,7 @@ import static org.springframework.http.HttpStatus.*;
 public class UserControllerImpl implements UserController{
 
     private final GetUserByUserNameHandler getUserByUserNameHandler;
+    private final GetUserByIdHandler getUserByIdHandler;
     private final UpdateUserByIdHandler updateUserByIdHandler;
     private final GetUserPageHandler getUserPageHandler;
     private final UserDtoMapper userDtoMapper;
@@ -111,12 +112,32 @@ public class UserControllerImpl implements UserController{
     }
 
     @Override
-    public ResponseEntity<HttpResponse> user(int id) {
-        return null;
+    @GetMapping("/id/{id}")
+    public ResponseEntity<HttpResponse> user(@PathVariable long id) {
+        final User user = getUserByIdHandler.execute(id);
+
+        return ResponseEntity.status(OK).body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .data(Map.of("user", userDtoMapper.toDto(user)))
+                        .message("User by id data")
+                        .reason("User by id request")
+                        .httpStatus(OK)
+                        .statusCode(OK.value())
+                .build());
     }
 
     @Override
-    public ResponseEntity<HttpResponse> user(String userName) {
-        return null;
+    @GetMapping("/userName/{userName}")
+    public ResponseEntity<HttpResponse> user(@PathVariable String userName) {
+        final User user = getUserByUserNameHandler.execute(userName);
+
+        return ResponseEntity.status(OK).body(HttpResponse.builder()
+                .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                .data(Map.of("user", userDtoMapper.toDto(user)))
+                .message("User by username data")
+                .reason("User by username request")
+                .httpStatus(OK)
+                .statusCode(OK.value())
+                .build());
     }
 }

@@ -11,6 +11,7 @@ import java.time.Instant;
 @Table(name = "blog_sections")
 @NoArgsConstructor
 @Getter
+@NamedEntityGraph(name = "section.creator", attributeNodes = @NamedAttributeNode("creator"))
 public class Section {
 
     @Id

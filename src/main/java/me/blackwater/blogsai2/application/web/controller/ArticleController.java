@@ -7,18 +7,25 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import me.blackwater.blogsai2.api.data.HttpResponse;
 import me.blackwater.blogsai2.application.web.request.CreateArticleRequest;
+import me.blackwater.blogsai2.application.web.request.UpdateArticleRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
-@Tag(name = "Article Management", description = "API endpoints for managing blog articles - CRUD operations, filtering and pagination")
+@Tag(
+        name = "Article Management",
+        description = "API endpoints for managing blog articles - CRUD operations, filtering and pagination"
+)
 public interface ArticleController {
 
     @Operation(
             summary = "Create new article",
-            description = "Creates a new blog article with the provided title, content, author and section. Returns the created article with generated ID."
+            description = "Creates a new blog article with the provided title, content, author and section. Returns the created article with generated ID.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -28,14 +35,13 @@ public interface ArticleController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = HttpResponse.class),
                             examples = @ExampleObject(
-                                    name = "Success Response",
                                     value = """
                                             {
-                                              "statusCode": 200,
+                                              "timeStamp": "2025-12-03T10:30:00",
                                               "httpStatus": "OK",
-                                              "timeStamp": "2024-11-24 10:30:45",
-                                              "message": "Article created",
+                                              "statusCode": 200,
                                               "reason": "Article create request",
+                                              "message": "Article created",
                                               "data": {
                                                 "article": {
                                                   "id": 1,
@@ -52,44 +58,51 @@ public interface ArticleController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid input data - validation error or business rule violation",
+                    description = "Invalid input data - validation error or author/section not found",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(ref = "#/components/schemas/ErrorResponse"),
-                            examples = @ExampleObject(
-                                    name = "Validation Error",
-                                    value = """
-                                            {
-                                              "statusCode": 400,
-                                              "httpStatus": "BAD_REQUEST",
-                                              "timeStamp": "2024-11-24 10:30:45",
-                                              "message": "Validation failed",
-                                              "reason": "Title cannot be blank"
-                                            }
-                                            """
-                            )
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Validation Error",
+                                            value = """
+                                                    {
+                                                      "timeStamp": "2025-12-03T10:30:00",
+                                                      "httpStatus": "BAD_REQUEST",
+                                                      "statusCode": 400,
+                                                      "reason": "Validation failed",
+                                                      "message": "Title cannot be blank"
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "Author Not Found",
+                                            value = """
+                                                    {
+                                                      "timeStamp": "2025-12-03T10:30:00",
+                                                      "httpStatus": "BAD_REQUEST",
+                                                      "statusCode": 400,
+                                                      "reason": "Author not found",
+                                                      "message": "Author with id 999 not found"
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "Section Not Found",
+                                            value = """
+                                                    {
+                                                      "timeStamp": "2025-12-03T10:30:00",
+                                                      "httpStatus": "BAD_REQUEST",
+                                                      "statusCode": 400,
+                                                      "reason": "Section not found",
+                                                      "message": "Section with id 999 not found"
+                                                    }
+                                                    """
+                                    )
+                            }
                     )
             ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Author or Section not found",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(ref = "#/components/schemas/ErrorResponse"),
-                            examples = @ExampleObject(
-                                    name = "Not Found Error",
-                                    value = """
-                                            {
-                                              "statusCode": 400,
-                                              "httpStatus": "BAD_REQUEST",
-                                              "timeStamp": "2024-11-24 10:30:45",
-                                              "message": "Article has not been found",
-                                              "reason": "Author with id 999 not found"
-                                            }
-                                            """
-                            )
-                    )
-            )
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
     })
     ResponseEntity<HttpResponse> create(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -98,7 +111,6 @@ public interface ArticleController {
                     content = @Content(
                             schema = @Schema(implementation = CreateArticleRequest.class),
                             examples = @ExampleObject(
-                                    name = "Create Article Example",
                                     value = """
                                             {
                                               "title": "Introduction to Spring Boot",
@@ -110,13 +122,16 @@ public interface ArticleController {
                             )
                     )
             )
-            CreateArticleRequest request,
+            @Valid CreateArticleRequest request,
+
+            @Parameter(hidden = true)
             Authentication authentication
     );
 
     @Operation(
             summary = "Get article by title",
-            description = "Retrieves a single article by its exact title. Title matching is case-sensitive."
+            description = "Retrieves a single article by its exact title. Title matching is case-sensitive.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -126,14 +141,13 @@ public interface ArticleController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = HttpResponse.class),
                             examples = @ExampleObject(
-                                    name = "Success Response",
                                     value = """
                                             {
-                                              "statusCode": 200,
+                                              "timeStamp": "2025-12-03T10:30:00",
                                               "httpStatus": "OK",
-                                              "timeStamp": "2024-11-24 10:30:45",
-                                              "message": "Article by title",
+                                              "statusCode": 200,
                                               "reason": "Article by title request",
+                                              "message": "Article by title",
                                               "data": {
                                                 "article": {
                                                   "id": 1,
@@ -153,9 +167,21 @@ public interface ArticleController {
                     description = "Article not found with the given title",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(ref = "#/components/schemas/ErrorResponse")
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "timeStamp": "2025-12-03T10:30:00",
+                                              "httpStatus": "BAD_REQUEST",
+                                              "statusCode": 400,
+                                              "reason": "Article has not been found",
+                                              "message": "Article with title 'Unknown Title' not found"
+                                            }
+                                            """
+                            )
                     )
-            )
+            ),
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
     })
     ResponseEntity<HttpResponse> article(
             @Parameter(
@@ -168,7 +194,8 @@ public interface ArticleController {
 
     @Operation(
             summary = "Get article by ID",
-            description = "Retrieves a single article by its unique identifier"
+            description = "Retrieves a single article by its unique identifier",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -176,7 +203,27 @@ public interface ArticleController {
                     description = "Article found and returned successfully",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = HttpResponse.class)
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "timeStamp": "2025-12-03T10:30:00",
+                                              "httpStatus": "OK",
+                                              "statusCode": 200,
+                                              "reason": "Article by id request",
+                                              "message": "Article by id",
+                                              "data": {
+                                                "article": {
+                                                  "id": 1,
+                                                  "title": "Introduction to Spring Boot",
+                                                  "content": "Spring Boot makes it easy...",
+                                                  "views": 150,
+                                                  "likes": 42
+                                                }
+                                              }
+                                            }
+                                            """
+                            )
                     )
             ),
             @ApiResponse(
@@ -184,9 +231,21 @@ public interface ArticleController {
                     description = "Article not found with the given ID",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(ref = "#/components/schemas/ErrorResponse")
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "timeStamp": "2025-12-03T10:30:00",
+                                              "httpStatus": "BAD_REQUEST",
+                                              "statusCode": 400,
+                                              "reason": "Article has not been found",
+                                              "message": "Article with id 999 not found"
+                                            }
+                                            """
+                            )
                     )
-            )
+            ),
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
     })
     ResponseEntity<HttpResponse> article(
             @Parameter(
@@ -199,7 +258,8 @@ public interface ArticleController {
 
     @Operation(
             summary = "Get articles by author",
-            description = "Retrieves all articles written by a specific author. Returns an empty list if no articles found."
+            description = "Retrieves all articles written by a specific author. Returns an empty list if no articles found.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -209,14 +269,13 @@ public interface ArticleController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = HttpResponse.class),
                             examples = @ExampleObject(
-                                    name = "Success Response",
                                     value = """
                                             {
-                                              "statusCode": 200,
+                                              "timeStamp": "2025-12-03T10:30:00",
                                               "httpStatus": "OK",
-                                              "timeStamp": "2024-11-24 10:30:45",
-                                              "message": "Article by author id",
+                                              "statusCode": 200,
                                               "reason": "Article by author id request",
+                                              "message": "Article by author id",
                                               "data": {
                                                 "articles": [
                                                   {
@@ -245,9 +304,21 @@ public interface ArticleController {
                     description = "Author not found",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(ref = "#/components/schemas/ErrorResponse")
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "timeStamp": "2025-12-03T10:30:00",
+                                              "httpStatus": "BAD_REQUEST",
+                                              "statusCode": 400,
+                                              "reason": "Author not found",
+                                              "message": "Author with id 999 not found"
+                                            }
+                                            """
+                            )
                     )
-            )
+            ),
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
     })
     ResponseEntity<HttpResponse> articleByAuthorId(
             @Parameter(
@@ -260,7 +331,8 @@ public interface ArticleController {
 
     @Operation(
             summary = "Get articles by section",
-            description = "Retrieves all articles belonging to a specific section/category. Returns an empty list if no articles found."
+            description = "Retrieves all articles belonging to a specific section/category. Returns an empty list if no articles found.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -268,7 +340,29 @@ public interface ArticleController {
                     description = "Articles found (can be empty list)",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = HttpResponse.class)
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "timeStamp": "2025-12-03T10:30:00",
+                                              "httpStatus": "OK",
+                                              "statusCode": 200,
+                                              "reason": "Article by section id request",
+                                              "message": "Article by section id",
+                                              "data": {
+                                                "articles": [
+                                                  {
+                                                    "id": 3,
+                                                    "title": "Tech Article",
+                                                    "content": "Technology content...",
+                                                    "views": 300,
+                                                    "likes": 50
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                            """
+                            )
                     )
             ),
             @ApiResponse(
@@ -276,9 +370,21 @@ public interface ArticleController {
                     description = "Section not found",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(ref = "#/components/schemas/ErrorResponse")
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "timeStamp": "2025-12-03T10:30:00",
+                                              "httpStatus": "BAD_REQUEST",
+                                              "statusCode": 400,
+                                              "reason": "Section not found",
+                                              "message": "Section with id 999 not found"
+                                            }
+                                            """
+                            )
                     )
-            )
+            ),
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
     })
     ResponseEntity<HttpResponse> articleBySectionId(
             @Parameter(
@@ -291,7 +397,8 @@ public interface ArticleController {
 
     @Operation(
             summary = "Get paginated articles",
-            description = "Retrieves a paginated list of all articles sorted by creation date in ascending order. Supports custom page size and page number."
+            description = "Retrieves a paginated list of all articles sorted by creation date in ascending order. Supports custom page size and page number.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -301,15 +408,16 @@ public interface ArticleController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = HttpResponse.class),
                             examples = @ExampleObject(
-                                    name = "Paginated Response",
                                     value = """
                                             {
-                                              "statusCode": 200,
+                                              "timeStamp": "2025-12-03T10:30:00",
                                               "httpStatus": "OK",
-                                              "timeStamp": "2024-11-24 10:30:45",
-                                              "message": "Articles data",
+                                              "statusCode": 200,
                                               "reason": "Articles request",
+                                              "message": "Articles data",
                                               "data": {
+                                                "totalElements": 25,
+                                                "totalPages": 5,
                                                 "articles": [
                                                   {
                                                     "id": 1,
@@ -317,16 +425,23 @@ public interface ArticleController {
                                                     "content": "Content...",
                                                     "views": 50,
                                                     "likes": 10
+                                                  },
+                                                  {
+                                                    "id": 2,
+                                                    "title": "Article Two",
+                                                    "content": "More content...",
+                                                    "views": 75,
+                                                    "likes": 15
                                                   }
-                                                ],
-                                                "totalElements": 25,
-                                                "totalPages": 5
+                                                ]
                                               }
                                             }
                                             """
                             )
                     )
-            )
+            ),
+            @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequestResponse"),
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
     })
     ResponseEntity<HttpResponse> articles(
             @Parameter(
@@ -335,6 +450,7 @@ public interface ArticleController {
                     schema = @Schema(type = "integer", defaultValue = "0", minimum = "0")
             )
             int page,
+
             @Parameter(
                     description = "Number of articles per page",
                     example = "5",
@@ -342,4 +458,8 @@ public interface ArticleController {
             )
             int size
     );
+
+    ResponseEntity<HttpResponse> countUserArticles(String authorName);
+
+    ResponseEntity<HttpResponse> update(UpdateArticleRequest request);
 }

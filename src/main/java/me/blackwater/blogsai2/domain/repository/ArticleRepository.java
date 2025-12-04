@@ -15,4 +15,5 @@ public interface ArticleRepository {
     List<Article> findBySectionId(long id);
     Page<Article> findPageableSortedOrdered(int page, int size, String sortDirection, String orderBy);
     Article save(Article article);
+    int countByAuthorId(long id);
 }

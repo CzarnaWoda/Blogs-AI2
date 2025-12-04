@@ -10,6 +10,9 @@ public record ArticleDto(
                 accessMode = Schema.AccessMode.READ_ONLY
         )
         long id,
+        String authorName,
+        String authorEmail,
+        String createdAt,
 
         @Schema(
                 description = "Title of the article",

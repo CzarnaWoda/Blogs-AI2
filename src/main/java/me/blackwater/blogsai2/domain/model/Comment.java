@@ -28,9 +28,9 @@ public class Comment {
     private Instant createdAt;
 
 
-    private int likes;
+    private int likes = 0;
 
-    private boolean disabled = true;
+    private boolean disabled = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", nullable = false)

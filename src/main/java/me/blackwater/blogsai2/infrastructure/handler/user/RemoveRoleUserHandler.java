@@ -19,7 +19,7 @@ public class RemoveRoleUserHandler implements UpdateHandler<User,UserRoleRequest
     public User execute(UserRoleRequest dto) {
         final User user = getUserByUserNameHandler.execute(dto.username());
 
-        user.addRole(dto.role());
+        user.removeRole(dto.role());
 
         return userRepository.save(user);
     }

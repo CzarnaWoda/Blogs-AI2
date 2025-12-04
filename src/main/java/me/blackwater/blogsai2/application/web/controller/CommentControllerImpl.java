@@ -51,8 +51,8 @@ public class CommentControllerImpl implements CommentController{
 
     @Override
     @GetMapping("/comments")
-    public ResponseEntity<HttpResponse> commentsByArticleId(@RequestBody PageRequestWithObjectId request) {
-        final Page<Comment> comments = getCommentByArticleIdHandler.execute(request);
+    public ResponseEntity<HttpResponse> commentsByArticleId(@RequestParam long objectId, @RequestParam int page, @RequestParam int size) {
+        final Page<Comment> comments = getCommentByArticleIdHandler.execute(new PageRequestWithObjectId(page,size,objectId));
 
         return ResponseEntity.status(OK)
                 .body(HttpResponse.builder()
@@ -66,8 +66,8 @@ public class CommentControllerImpl implements CommentController{
     }
 
     @Override
-    @GetMapping
-    public ResponseEntity<HttpResponse> comment(long id) {
+    @GetMapping("/id/{id}")
+    public ResponseEntity<HttpResponse> comment(@PathVariable long id) {
         final Comment comment = getCommentByIdHandler.execute(id);
 
         return ResponseEntity.status(OK)

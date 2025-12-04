@@ -7,11 +7,11 @@ import me.blackwater.blogsai2.api.util.TimeUtil;
 import me.blackwater.blogsai2.application.mapper.ArticleDtoMapper;
 import me.blackwater.blogsai2.application.web.request.CreateArticleRequest;
 import me.blackwater.blogsai2.application.web.request.PageSortOrderRequest;
+import me.blackwater.blogsai2.application.web.request.UpdateArticleRequest;
 import me.blackwater.blogsai2.domain.model.Article;
 import me.blackwater.blogsai2.domain.model.User;
 import me.blackwater.blogsai2.infrastructure.handler.article.*;
 import me.blackwater.blogsai2.infrastructure.handler.user.GetUserByEmailHandler;
-import me.blackwater.blogsai2.infrastructure.handler.user.GetUserByUserNameHandler;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -35,12 +35,15 @@ class ArticleControllerImpl implements ArticleController{
     private final GetArticlePageSortedOrderedHandler getArticlePageSortedOrderedHandler;
     private final GetUserByEmailHandler getUserByEmailHandler;
     private final ArticleDtoMapper articleDtoMapper;
+    private final GetArticleCountByAuthorIdHandler getArticleCountByAuthorIdHandler;
+    private final UpdateArticleByIdHandler updateArticleByIdHandler;
 
     @Override
     @PostMapping
     public ResponseEntity<HttpResponse> create(@RequestBody @Valid CreateArticleRequest request, Authentication authentication) {
-        final Article article = createArticleHandler.execute(request);
+        final User user = getUserByEmailHandler.execute(authentication.getName());
 
+        final Article article = createArticleHandler.execute(new CreateArticleRequest(request.title(),user.getId(),request.content(),request.sectionId()));
 
         return ResponseEntity.status(OK).body(HttpResponse.builder()
                         .statusCode(OK.value())
@@ -125,5 +128,35 @@ class ArticleControllerImpl implements ArticleController{
                 .reason("Articles request")
                 .data(Map.of("articles", articles.getContent().stream().map(articleDtoMapper::toDto).toList(), "totalElements", articles.getTotalElements(), "totalPages", articles.getTotalPages()))
                 .build());
+    }
+
+    @Override
+    @GetMapping("/count/{authorName}")
+    public ResponseEntity<HttpResponse> countUserArticles(@PathVariable String authorName) {
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .message("Count user articles")
+                        .reason("Count user articles request")
+                        .data(Map.of("articles", getArticleCountByAuthorIdHandler.execute(authorName)))
+                        .build());
+    }
+
+    @Override
+    @PutMapping
+    public ResponseEntity<HttpResponse> update(@RequestBody UpdateArticleRequest request) {
+        final Article article = updateArticleByIdHandler.execute(request);
+
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .message("Article updated")
+                        .reason("Article updated request")
+                        .data(Map.of("article", articleDtoMapper.toDto(article)))
+                        .build());
     }
 }

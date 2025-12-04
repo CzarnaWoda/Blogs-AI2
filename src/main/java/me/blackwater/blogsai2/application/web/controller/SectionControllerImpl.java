@@ -39,7 +39,7 @@ class SectionControllerImpl implements SectionController{
     private final UpdateSectionByIdHandler updateSectionByIdHandler;
 
     @Override
-    @GetMapping("/sections/title/{type}")
+    @GetMapping("/sections/type/{type}")
     public ResponseEntity<HttpResponse> sectionsByType(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size, @PathVariable String type) {
        final Page<Section> sections = getSectionsByTypeHandler.execute(new GetSectionByTypeRequest(page,size,type));
 

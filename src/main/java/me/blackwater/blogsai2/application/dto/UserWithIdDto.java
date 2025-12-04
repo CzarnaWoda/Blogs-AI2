@@ -29,6 +29,8 @@ public record UserWithIdDto(
                 description = "Set of user roles",
                 example = "[\"USER\", \"ADMIN\"]"
         )
-        Set<String> userRoles
+        Set<String> userRoles,
+
+        String createdAt
 ) {
 }

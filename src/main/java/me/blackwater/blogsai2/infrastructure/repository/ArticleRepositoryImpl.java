@@ -54,4 +54,9 @@ class ArticleRepositoryImpl implements ArticleRepository {
     public Article save(Article article) {
         return articleJpaRepository.save(article);
     }
+
+    @Override
+    public int countByAuthorId(long id) {
+        return articleJpaRepository.countAllByAuthorId(id);
+    }
 }

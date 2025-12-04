@@ -86,6 +86,10 @@ public class User {
     public void addRole(String role){
         this.roles.add(new UserRole(role));
     }
+    public void removeRole(String role){
+        final UserRole roleToRemove = this.roles.stream().filter(r -> r.getValue().equals(role)).findFirst().orElse(null);
+        this.roles.remove(roleToRemove);
+    }
 
     public void update(String countryCode, String phoneNumber, String userName){
         this.phone = new Phone(phoneNumber, countryCode);

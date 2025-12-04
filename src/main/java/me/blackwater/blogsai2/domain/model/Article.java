@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Table(name = "blog_articles")
 @NoArgsConstructor
+@NamedEntityGraph(name = "article.author", attributeNodes = @NamedAttributeNode("author"))
 public class Article {
 
     @Id
@@ -68,6 +69,13 @@ public class Article {
     public void block(){
         this.blocked = true;
         this.updatedAt = Instant.now();
+    }
+
+    public void update(String title, String content){
+        this.updatedAt = Instant.now();
+
+        this.title = title;
+        this.content = content;
     }
 
     public void unblock(){

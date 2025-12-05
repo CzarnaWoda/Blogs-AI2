@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 @Schema(description = "Pagination request with an object identifier (e.g., article ID for comments)")
-public record PageRequestWithObjectId(
+public record PageRequestObjectId(
 
         @Min(value = 0, message = "Page number cannot be negative")
         @Schema(
@@ -34,7 +34,6 @@ public record PageRequestWithObjectId(
         @Schema(
                 description = "ID of the related object (e.g., article ID for fetching comments)",
                 example = "5",
-                required = true,
                 minimum = "1"
         )
         Long objectId

@@ -5,7 +5,7 @@ import me.blackwater.blogsai2.api.data.HttpResponse;
 import me.blackwater.blogsai2.api.util.TimeUtil;
 import me.blackwater.blogsai2.application.mapper.CommentDtoMapper;
 import me.blackwater.blogsai2.application.web.request.CreateCommentRequest;
-import me.blackwater.blogsai2.application.web.request.PageRequestWithObjectId;
+import me.blackwater.blogsai2.application.web.request.PageRequestObjectId;
 import me.blackwater.blogsai2.domain.model.Comment;
 import me.blackwater.blogsai2.domain.model.User;
 import me.blackwater.blogsai2.infrastructure.handler.comment.*;
@@ -52,7 +52,7 @@ public class CommentControllerImpl implements CommentController{
     @Override
     @GetMapping("/comments")
     public ResponseEntity<HttpResponse> commentsByArticleId(@RequestParam long objectId, @RequestParam int page, @RequestParam int size) {
-        final Page<Comment> comments = getCommentByArticleIdHandler.execute(new PageRequestWithObjectId(page,size,objectId));
+        final Page<Comment> comments = getCommentByArticleIdHandler.execute(new PageRequestObjectId(page,size,objectId));
 
         return ResponseEntity.status(OK)
                 .body(HttpResponse.builder()

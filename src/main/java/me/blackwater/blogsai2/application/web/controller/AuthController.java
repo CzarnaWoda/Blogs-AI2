@@ -266,5 +266,61 @@ interface AuthController {
             Authentication authentication
     );
 
-    ResponseEntity<HttpResponse> me(Authentication authentication);
+    @Operation(
+            summary = "Get current user profile",
+            description = "Returns the profile information of the currently authenticated user including username, email, phone and roles.",
+            security = @SecurityRequirement(name = "bearer-jwt")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User profile retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                        {
+                          "timeStamp": "2025-11-20 10:30:00",
+                          "httpStatus": "OK",
+                          "statusCode": 200,
+                          "reason": "Get current user request",
+                          "message": "Current user profile",
+                          "data": {
+                            "user": {
+                              "userName": "johndoe",
+                              "phone": "+48123456789",
+                              "email": "user@example.com",
+                              "userRoles": ["USER"]
+                            }
+                          }
+                        }
+                        """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized - JWT token missing or invalid",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                        {
+                          "timeStamp": "2025-11-20 10:30:00",
+                          "httpStatus": "UNAUTHORIZED",
+                          "statusCode": 401,
+                          "reason": "Authentication required",
+                          "message": "JWT token missing or invalid"
+                        }
+                        """
+                            )
+                    )
+            )
+    })
+    ResponseEntity<HttpResponse> me(
+            @io.swagger.v3.oas.annotations.Parameter(hidden = true)
+            Authentication authentication
+    );
 }

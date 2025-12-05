@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import me.blackwater.blogsai2.api.data.HttpResponse;
 import me.blackwater.blogsai2.application.web.request.CreateCommentRequest;
-import me.blackwater.blogsai2.application.web.request.PageRequestWithObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
@@ -182,8 +181,27 @@ public interface CommentController {
             )
     })
     ResponseEntity<HttpResponse> commentsByArticleId(
+            @Parameter(
+                    description = "Unique identifier of the article whose comments to retrieve",
+                    required = true,
+                    example = "5"
+            )
             long objectId,
+
+            @Parameter(
+                    description = "Page number (zero-based index)",
+                    required = true,
+                    example = "0",
+                    schema = @Schema(minimum = "0", defaultValue = "0")
+            )
             int page,
+
+            @Parameter(
+                    description = "Number of comments per page",
+                    required = true,
+                    example = "10",
+                    schema = @Schema(minimum = "1", maximum = "100", defaultValue = "10")
+            )
             int size
     );
 

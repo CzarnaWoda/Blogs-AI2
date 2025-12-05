@@ -6,6 +6,8 @@ import me.blackwater.blogsai2.domain.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -20,4 +22,11 @@ interface UserJpaRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByPhone(Phone phone);
 
+    Page<User> findAllByEmailContainingIgnoreCase(Email email, Pageable pageable);
+
+    @Query("SELECT u from user u JOIN u.roles role where role.value = :role")
+    Page<User> findAllByUserRole(@Param("role") String userRole, Pageable pageable);
+
+    @Query("SELECT u from user  u JOIN u.roles role where role.value = :role AND LOWER(u.email) like LOWER(CONCAT('%', :email, '%'))")
+    Page<User> findAllByEmailAndUserRole(Email email, String userRole, Pageable pageable);
 }

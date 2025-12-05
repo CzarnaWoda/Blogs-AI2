@@ -7,11 +7,13 @@ import me.blackwater.blogsai2.application.mapper.UserDtoMapper;
 import me.blackwater.blogsai2.application.web.request.PageRequest;
 import me.blackwater.blogsai2.application.web.request.UpdateUserRequest;
 import me.blackwater.blogsai2.application.web.request.UserRoleRequest;
+import me.blackwater.blogsai2.domain.exception.IllegalActionException;
 import me.blackwater.blogsai2.domain.model.User;
 import me.blackwater.blogsai2.infrastructure.handler.user.*;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -82,6 +84,9 @@ public class UserControllerImpl implements UserController{
                             .data(Map.of("user", userDtoMapper.toDto(updatedUser)))
                             .build());
         }else{
+            if(!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))){
+                throw new IllegalActionException("Illegal action for update!");
+            }
             final User user = updateUserByIdHandler.execute(updateUserRequest);
 
             return ResponseEntity.status(OK)
@@ -97,7 +102,7 @@ public class UserControllerImpl implements UserController{
     }
 
     @Override
-    @GetMapping("users")
+    @GetMapping("/users")
     public ResponseEntity<HttpResponse> users(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         final Page<User> users = getUserPageHandler.execute(new PageRequest(page,size));
 

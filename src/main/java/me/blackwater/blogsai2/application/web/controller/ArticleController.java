@@ -459,7 +459,213 @@ public interface ArticleController {
             int size
     );
 
-    ResponseEntity<HttpResponse> countUserArticles(String authorName);
+    @Operation(
+            summary = "Count articles by author",
+            description = "Returns the total number of articles written by a specific author identified by username.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Article count retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "timeStamp": "2025-12-03T10:30:00",
+                                              "httpStatus": "OK",
+                                              "statusCode": 200,
+                                              "reason": "Count user articles request",
+                                              "message": "Count user articles",
+                                              "data": {
+                                                "articles": 12
+                                              }
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Author not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "timeStamp": "2025-12-03T10:30:00",
+                                              "httpStatus": "BAD_REQUEST",
+                                              "statusCode": 400,
+                                              "reason": "Author not found",
+                                              "message": "Author with username 'unknown' not found"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
+    })
+    ResponseEntity<HttpResponse> countUserArticles(
+            @Parameter(
+                    description = "Username of the author whose articles to count",
+                    required = true,
+                    example = "johndoe"
+            )
+            String authorName
+    );
 
-    ResponseEntity<HttpResponse> update(UpdateArticleRequest request);
+    @Operation(
+            summary = "Update article",
+            description = "Updates an existing article's title and/or content. Only the provided fields will be updated. Requires authentication.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Article updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "timeStamp": "2025-12-03T10:30:00",
+                                              "httpStatus": "OK",
+                                              "statusCode": 200,
+                                              "reason": "Article updated request",
+                                              "message": "Article updated",
+                                              "data": {
+                                                "article": {
+                                                  "id": 1,
+                                                  "title": "Updated Article Title",
+                                                  "content": "Updated content here...",
+                                                  "views": 150,
+                                                  "likes": 42
+                                                }
+                                              }
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Article not found or validation error",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Article Not Found",
+                                            value = """
+                                                    {
+                                                      "timeStamp": "2025-12-03T10:30:00",
+                                                      "httpStatus": "BAD_REQUEST",
+                                                      "statusCode": 400,
+                                                      "reason": "Article has not been found",
+                                                      "message": "Article with id 999 not found"
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "Validation Error",
+                                            value = """
+                                                    {
+                                                      "timeStamp": "2025-12-03T10:30:00",
+                                                      "httpStatus": "BAD_REQUEST",
+                                                      "statusCode": 400,
+                                                      "reason": "Validation failed",
+                                                      "message": "Title cannot be blank"
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
+    })
+    ResponseEntity<HttpResponse> update(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Article update data with ID and fields to update (title and/or content)",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = UpdateArticleRequest.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "id": 1,
+                                              "title": "Updated Article Title",
+                                              "content": "This is the updated content of the article..."
+                                            }
+                                            """
+                            )
+                    )
+            )
+            UpdateArticleRequest request
+    );
+
+    @Operation(
+            summary = "Like an article",
+            description = "Adds a like to the specified article. Increases the article's like count by one. Requires authentication.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Article liked successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "timeStamp": "2025-12-03T10:30:00",
+                                              "httpStatus": "OK",
+                                              "statusCode": 200,
+                                              "reason": "Like article request",
+                                              "message": "Article liked successfully",
+                                              "data": {
+                                                "article": {
+                                                  "id": 1,
+                                                  "title": "Introduction to Spring Boot",
+                                                  "likes": 43
+                                                }
+                                              }
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Article not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "timeStamp": "2025-12-03T10:30:00",
+                                              "httpStatus": "BAD_REQUEST",
+                                              "statusCode": 400,
+                                              "reason": "Article has not been found",
+                                              "message": "Article with id 999 not found"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
+    })
+    ResponseEntity<HttpResponse> like(
+            @Parameter(
+                    description = "Unique identifier of the article to like",
+                    required = true,
+                    example = "1"
+            )
+            long articleId
+    );
 }

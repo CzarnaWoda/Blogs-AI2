@@ -27,7 +27,7 @@ class OpenApiConfiguration {
                         .description("REST API for BlogsAI application - User management, authentication, and blog operations")
                         .contact(new Contact()
                                 .name("BlackWater")
-                                .email("support@blogsai.com"))
+                                .email("kmimat299@gmail.com"))
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0.html")))

@@ -22,5 +22,11 @@ public interface UserRepository {
 
     Page<User> findAll(Pageable pageable);
 
+    Page<User> findAllByEmail(String email, Pageable pageable);
+
+    Page<User> findAllByUserRole(String userRole, Pageable pageable);
+
+    Page<User> findAllByUserRoleAndEmail(String userRole, String email, Pageable pageable);
+
 
 }

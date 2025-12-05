@@ -7,7 +7,6 @@ import me.blackwater.blogsai2.domain.model.Phone;
 import me.blackwater.blogsai2.domain.model.User;
 import me.blackwater.blogsai2.domain.repository.UserRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -47,5 +46,20 @@ class UserRepositoryImpl implements UserRepository {
     @Override
     public Page<User> findAll(Pageable pageable) {
         return userJpaRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<User> findAllByEmail(String email, Pageable pageable) {
+        return userJpaRepository.findAllByEmailContainingIgnoreCase(new Email(email), pageable);
+    }
+
+    @Override
+    public Page<User> findAllByUserRole(String userRole, Pageable pageable) {
+        return userJpaRepository.findAllByUserRole(userRole, pageable);
+    }
+
+    @Override
+    public Page<User> findAllByUserRoleAndEmail(String userRole, String email, Pageable pageable) {
+        return userJpaRepository.findAllByEmailAndUserRole(new Email(email),email, pageable);
     }
 }

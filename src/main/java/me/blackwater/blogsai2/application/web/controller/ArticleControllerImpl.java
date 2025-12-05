@@ -37,6 +37,7 @@ class ArticleControllerImpl implements ArticleController{
     private final ArticleDtoMapper articleDtoMapper;
     private final GetArticleCountByAuthorIdHandler getArticleCountByAuthorIdHandler;
     private final UpdateArticleByIdHandler updateArticleByIdHandler;
+    private final LikeArticleHandler likeArticleHandler;
 
     @Override
     @PostMapping
@@ -156,6 +157,22 @@ class ArticleControllerImpl implements ArticleController{
                         .timeStamp(TimeUtil.getCurrentTimeWithFormat())
                         .message("Article updated")
                         .reason("Article updated request")
+                        .data(Map.of("article", articleDtoMapper.toDto(article)))
+                        .build());
+    }
+    @PatchMapping("/like")
+    @Override
+    public ResponseEntity<HttpResponse> like(@RequestParam long id){
+        final Article article = likeArticleHandler.execute(id);
+
+
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .message("Article liked")
+                        .reason("Article like request")
                         .data(Map.of("article", articleDtoMapper.toDto(article)))
                         .build());
     }

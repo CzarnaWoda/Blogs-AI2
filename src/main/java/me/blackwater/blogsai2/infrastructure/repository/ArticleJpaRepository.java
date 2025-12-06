@@ -18,7 +18,7 @@ interface ArticleJpaRepository extends JpaRepository<Article,Long> {
     List<Article> findBySectionId(long sectionId);
 
     @EntityGraph("article.author")
-    Page<Article> findAll(Pageable pageable);
+    Page<Article> findAllByBlockedFalse(Pageable pageable);
 
     int countAllByAuthorId(long authorId);
 }

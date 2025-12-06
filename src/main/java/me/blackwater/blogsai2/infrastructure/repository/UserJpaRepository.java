@@ -22,11 +22,12 @@ interface UserJpaRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByPhone(Phone phone);
 
-    Page<User> findAllByEmailContainingIgnoreCase(Email email, Pageable pageable);
+    @Query("SELECT u FROM user u WHERE LOWER(u.email.value) LIKE LOWER(CONCAT('%', :email, '%'))")
+    Page<User> findAllByEmailContainingIgnoreCase(@Param("email") String email, Pageable pageable);
 
     @Query("SELECT u from user u JOIN u.roles role where role.value = :role")
     Page<User> findAllByUserRole(@Param("role") String userRole, Pageable pageable);
 
-    @Query("SELECT u from user  u JOIN u.roles role where role.value = :role AND LOWER(u.email) like LOWER(CONCAT('%', :email, '%'))")
-    Page<User> findAllByEmailAndUserRole(Email email, String userRole, Pageable pageable);
+    @Query("SELECT u from user  u JOIN u.roles role where role.value = :role AND LOWER(u.email.value) like LOWER(CONCAT('%', :email, '%'))")
+    Page<User> findAllByEmailAndUserRole(@Param("email") String email, @Param("role") String userRole, Pageable pageable);
 }

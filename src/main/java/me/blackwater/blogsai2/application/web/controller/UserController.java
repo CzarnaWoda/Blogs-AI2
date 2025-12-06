@@ -274,4 +274,167 @@ public interface UserController {
     ResponseEntity<HttpResponse> user(
             @Parameter(description = "Username", required = true, example = "johndoe") String userName
     );
+
+    @Operation(
+            summary = "Get users filtered by email",
+            description = "Retrieves a paginated list of users filtered by email pattern. The email filter performs a partial match.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved filtered users page",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                        {
+                                          "timeStamp": "2025-12-03T10:30:00",
+                                          "httpStatus": "OK",
+                                          "statusCode": 200,
+                                          "reason": "Users page request by email filter",
+                                          "message": "Users page data by email filter",
+                                          "data": {
+                                            "totalElements": 15,
+                                            "totalPages": 3,
+                                            "users": [
+                                              {
+                                                "id": 1,
+                                                "userName": "johndoe",
+                                                "phone": "+48123456789",
+                                                "email": "john@gmail.com",
+                                                "userRoles": ["USER"]
+                                              },
+                                              {
+                                                "id": 2,
+                                                "userName": "janedoe",
+                                                "phone": "+48987654321",
+                                                "email": "jane@gmail.com",
+                                                "userRoles": ["USER", "ADMIN"]
+                                              }
+                                            ]
+                                          }
+                                        }
+                                        """
+                            )
+                    )
+            ),
+            @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequestResponse"),
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
+    })
+    ResponseEntity<HttpResponse> usersByEmail(
+            @Parameter(description = "Email filter pattern", example = ".com") String email,
+            @Parameter(description = "Page number (zero-based)", example = "0") int page,
+            @Parameter(description = "Number of items per page", example = "5") int size
+    );
+
+    @Operation(
+            summary = "Get users filtered by role",
+            description = "Retrieves a paginated list of users filtered by their assigned role.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved filtered users page",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                        {
+                                          "timeStamp": "2025-12-03T10:30:00",
+                                          "httpStatus": "OK",
+                                          "statusCode": 200,
+                                          "reason": "Users page request by role filter",
+                                          "message": "Users page data by role filter",
+                                          "data": {
+                                            "totalElements": 10,
+                                            "totalPages": 2,
+                                            "users": [
+                                              {
+                                                "id": 1,
+                                                "userName": "johndoe",
+                                                "phone": "+48123456789",
+                                                "email": "john@example.com",
+                                                "userRoles": ["USER", "ADMIN"]
+                                              },
+                                              {
+                                                "id": 3,
+                                                "userName": "adminuser",
+                                                "phone": "+48555666777",
+                                                "email": "admin@example.com",
+                                                "userRoles": ["USER", "ADMIN"]
+                                              }
+                                            ]
+                                          }
+                                        }
+                                        """
+                            )
+                    )
+            ),
+            @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequestResponse"),
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
+    })
+    ResponseEntity<HttpResponse> usersByRole(
+            @Parameter(description = "Role name", example = "USER") String role,
+            @Parameter(description = "Page number (zero-based)", example = "0") int page,
+            @Parameter(description = "Number of items per page", example = "5") int size
+    );
+
+    @Operation(
+            summary = "Get users filtered by email and role",
+            description = "Retrieves a paginated list of users filtered by both email pattern and assigned role. Combines both filters for more precise results.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved filtered users page",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = HttpResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                        {
+                                          "timeStamp": "2025-12-03T10:30:00",
+                                          "httpStatus": "OK",
+                                          "statusCode": 200,
+                                          "reason": "Users page request by role and email filter",
+                                          "message": "Users page data by role and email filter",
+                                          "data": {
+                                            "totalElements": 8,
+                                            "totalPages": 2,
+                                            "users": [
+                                              {
+                                                "id": 1,
+                                                "userName": "johndoe",
+                                                "phone": "+48123456789",
+                                                "email": "john@gmail.com",
+                                                "userRoles": ["USER", "ADMIN"]
+                                              },
+                                              {
+                                                "id": 5,
+                                                "userName": "alice",
+                                                "phone": "+48111222333",
+                                                "email": "alice@gmail.com",
+                                                "userRoles": ["USER", "ADMIN"]
+                                              }
+                                            ]
+                                          }
+                                        }
+                                        """
+                            )
+                    )
+            ),
+            @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequestResponse"),
+            @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedResponse")
+    })
+    ResponseEntity<HttpResponse> usersByEmailAndRole(
+            @Parameter(description = "Role name", example = "USER") String role,
+            @Parameter(description = "Email filter pattern", example = ".com") String email,
+            @Parameter(description = "Page number (zero-based)", example = "0") int page,
+            @Parameter(description = "Number of items per page", example = "5") int size
+    );
 }

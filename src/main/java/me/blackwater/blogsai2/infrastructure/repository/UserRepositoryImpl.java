@@ -50,7 +50,7 @@ class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Page<User> findAllByEmail(String email, Pageable pageable) {
-        return userJpaRepository.findAllByEmailContainingIgnoreCase(new Email(email), pageable);
+        return userJpaRepository.findAllByEmailContainingIgnoreCase(email, pageable);
     }
 
     @Override
@@ -60,6 +60,6 @@ class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Page<User> findAllByUserRoleAndEmail(String userRole, String email, Pageable pageable) {
-        return userJpaRepository.findAllByEmailAndUserRole(new Email(email),email, pageable);
+        return userJpaRepository.findAllByEmailAndUserRole(email,userRole, pageable);
     }
 }

@@ -3,7 +3,6 @@ package me.blackwater.blogsai2.infrastructure.repository;
 import lombok.RequiredArgsConstructor;
 import me.blackwater.blogsai2.domain.exception.ObjectRequirementsException;
 import me.blackwater.blogsai2.domain.model.Article;
-import me.blackwater.blogsai2.domain.model.Comment;
 import me.blackwater.blogsai2.domain.repository.ArticleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,7 +43,7 @@ class ArticleRepositoryImpl implements ArticleRepository {
         try {
             final Sort.Direction direction = Sort.Direction.fromString(sortDirection);
 
-            return articleJpaRepository.findAll(PageRequest.of(page, size, direction, orderBy));
+            return articleJpaRepository.findAllByBlockedFalse(PageRequest.of(page, size, direction, orderBy));
         }catch (IllegalArgumentException e) {
             throw new ObjectRequirementsException("Sort direction has to be 'ASC' or 'DESC'");
         }

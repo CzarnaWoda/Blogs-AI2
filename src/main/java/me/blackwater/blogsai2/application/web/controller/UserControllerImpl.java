@@ -5,6 +5,7 @@ import me.blackwater.blogsai2.api.data.HttpResponse;
 import me.blackwater.blogsai2.api.util.TimeUtil;
 import me.blackwater.blogsai2.application.mapper.UserDtoMapper;
 import me.blackwater.blogsai2.application.web.request.PageRequest;
+import me.blackwater.blogsai2.application.web.request.PageRequestStringFilter;
 import me.blackwater.blogsai2.application.web.request.UpdateUserRequest;
 import me.blackwater.blogsai2.application.web.request.UserRoleRequest;
 import me.blackwater.blogsai2.domain.exception.IllegalActionException;
@@ -34,6 +35,9 @@ public class UserControllerImpl implements UserController{
     private final AddRoleUserHandler addRoleUserHandler;
     private final RemoveRoleUserHandler removeRoleUserHandler;
     private final GetUserByEmailHandler getUserByEmailHandler;
+    private final GetUserPageByEmailHandler getUserPageByEmailHandler;
+    private final GetUserPageByRoleHandler getUserPageByRoleHandler;
+    private final GetUserPageByEmailAndRoleHandler getUserPageByEmailAndRoleHandler;
     @Override
     @PatchMapping("/role/add")
     public ResponseEntity<HttpResponse> addRole(@RequestBody UserRoleRequest addUserRoleRequest) {
@@ -144,5 +148,53 @@ public class UserControllerImpl implements UserController{
                 .httpStatus(OK)
                 .statusCode(OK.value())
                 .build());
+    }
+
+    @Override
+    @GetMapping("/users/email")
+    public ResponseEntity<HttpResponse> usersByEmail(@RequestParam(defaultValue = ".com") String email, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        final var users = getUserPageByEmailHandler.execute(new PageRequestStringFilter(page,size,email));
+
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .httpStatus(OK)
+                        .statusCode(OK.value())
+                        .reason("Users page request by email filter")
+                        .message("Users page data by email filter")
+                        .data(Map.of("users", users.getContent().stream().map(userDtoMapper::toDtoWithId).toList(), "totalElements" , users.getTotalElements(), "totalPages", users.getTotalPages()))
+                        .build());
+    }
+
+    @Override
+    @GetMapping("/users/role")
+    public ResponseEntity<HttpResponse> usersByRole(@RequestParam(defaultValue = "USER") String role, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        final var users = getUserPageByRoleHandler.execute(new PageRequestStringFilter(page,size,role));
+
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .httpStatus(OK)
+                        .statusCode(OK.value())
+                        .reason("Users page request by role filter")
+                        .message("Users page data by role filter")
+                        .data(Map.of("users", users.getContent().stream().map(userDtoMapper::toDtoWithId).toList(), "totalElements" , users.getTotalElements(), "totalPages", users.getTotalPages()))
+                        .build());
+    }
+
+    @Override
+    @GetMapping("/users/email-role")
+    public ResponseEntity<HttpResponse> usersByEmailAndRole(@RequestParam(defaultValue = "USER") String role, @RequestParam(defaultValue = ".com") String email, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        final var users = getUserPageByEmailAndRoleHandler.execute(new PageRequestStringFilter.PageRequestStringFilters(page,size,email,role));
+
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .httpStatus(OK)
+                        .statusCode(OK.value())
+                        .reason("Users page request by role and email filter")
+                        .message("Users page data by role and email filter")
+                        .data(Map.of("users", users.getContent().stream().map(userDtoMapper::toDtoWithId).toList(), "totalElements" , users.getTotalElements(), "totalPages", users.getTotalPages()))
+                        .build());
     }
 }

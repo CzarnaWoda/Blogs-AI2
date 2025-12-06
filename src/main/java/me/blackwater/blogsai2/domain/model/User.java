@@ -39,6 +39,7 @@ public class User {
     private Phone phone;
 
     @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "email"))
     private Email email;
 
     @ElementCollection(fetch = FetchType.EAGER)

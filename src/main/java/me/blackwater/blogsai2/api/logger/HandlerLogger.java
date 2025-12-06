@@ -22,8 +22,8 @@ public class HandlerLogger {
         for (Type type : interfaces) {
             if (type instanceof ParameterizedType parameterizedType) {
 
-                Type inputType = parameterizedType.getActualTypeArguments()[0];
-                Type outputType = parameterizedType.getActualTypeArguments()[1];
+                Type inputType = parameterizedType.getActualTypeArguments()[1];
+                Type outputType = parameterizedType.getActualTypeArguments()[0];
 
                 log.info(
                         "Create handler log: {} | input: {} | output: {} | handler: {}",

@@ -19,5 +19,5 @@ interface SectionJpaRepository extends JpaRepository<Section,Long> {
     Page<Section> findByType(Pageable pageable, String type);
 
     @EntityGraph("section.creator")
-    Page<Section> findAll(Pageable pageable);
+    Page<Section> findAllByActiveTrue(Pageable pageable);
 }

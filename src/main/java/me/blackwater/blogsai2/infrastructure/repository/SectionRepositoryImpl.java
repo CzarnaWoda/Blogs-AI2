@@ -34,7 +34,7 @@ class SectionRepositoryImpl implements SectionRepository {
 
     @Override
     public Page<Section> findAll(int page, int size) {
-        return sectionJpaRepository.findAll(PageRequest.of(page, size, Sort.Direction.ASC,"createdAt"));
+        return sectionJpaRepository.findAllByActiveTrue(PageRequest.of(page, size, Sort.Direction.ASC,"createdAt"));
     }
 
     @Override

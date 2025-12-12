@@ -24,7 +24,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/article")
+@RequestMapping("/api/v1/articles")
 class ArticleControllerImpl implements ArticleController{
 
     private final CreateArticleHandler createArticleHandler;
@@ -72,7 +72,7 @@ class ArticleControllerImpl implements ArticleController{
     }
 
     @Override
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<HttpResponse> article(@PathVariable long id) {
         final Article article = getArticleByIdHandler.execute(id);
 
@@ -117,7 +117,7 @@ class ArticleControllerImpl implements ArticleController{
     }
 
     @Override
-    @GetMapping("/articles")
+    @GetMapping()
     public ResponseEntity<HttpResponse> articles(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         final Page<Article> articles = getArticlePageSortedOrderedHandler.execute(new PageSortOrderRequest(page,size,"ASC", "createdAt"));
 

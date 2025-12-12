@@ -23,7 +23,7 @@ import static org.springframework.http.HttpStatus.*;
 
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserControllerImpl implements UserController{
 
@@ -106,7 +106,7 @@ public class UserControllerImpl implements UserController{
     }
 
     @Override
-    @GetMapping("/users")
+    @GetMapping("")
     public ResponseEntity<HttpResponse> users(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         final Page<User> users = getUserPageHandler.execute(new PageRequest(page,size));
 
@@ -121,7 +121,7 @@ public class UserControllerImpl implements UserController{
     }
 
     @Override
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<HttpResponse> user(@PathVariable long id) {
         final User user = getUserByIdHandler.execute(id);
 
@@ -136,9 +136,9 @@ public class UserControllerImpl implements UserController{
     }
 
     @Override
-    @GetMapping("/userName/{userName}")
-    public ResponseEntity<HttpResponse> user(@PathVariable String userName) {
-        final User user = getUserByUserNameHandler.execute(userName);
+    @GetMapping("/username/{username}")
+    public ResponseEntity<HttpResponse> user(@PathVariable String username) {
+        final User user = getUserByUserNameHandler.execute(username);
 
         return ResponseEntity.status(OK).body(HttpResponse.builder()
                 .timeStamp(TimeUtil.getCurrentTimeWithFormat())
@@ -151,7 +151,7 @@ public class UserControllerImpl implements UserController{
     }
 
     @Override
-    @GetMapping("/users/email")
+    @GetMapping("/byEmail")
     public ResponseEntity<HttpResponse> usersByEmail(@RequestParam(defaultValue = ".com") String email, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         final var users = getUserPageByEmailHandler.execute(new PageRequestStringFilter(page,size,email));
 
@@ -167,7 +167,7 @@ public class UserControllerImpl implements UserController{
     }
 
     @Override
-    @GetMapping("/users/role")
+    @GetMapping("/byRole")
     public ResponseEntity<HttpResponse> usersByRole(@RequestParam(defaultValue = "USER") String role, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         final var users = getUserPageByRoleHandler.execute(new PageRequestStringFilter(page,size,role));
 
@@ -183,7 +183,7 @@ public class UserControllerImpl implements UserController{
     }
 
     @Override
-    @GetMapping("/users/email-role")
+    @GetMapping("/byEmailRole")
     public ResponseEntity<HttpResponse> usersByEmailAndRole(@RequestParam(defaultValue = "USER") String role, @RequestParam(defaultValue = ".com") String email, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         final var users = getUserPageByEmailAndRoleHandler.execute(new PageRequestStringFilter.PageRequestStringFilters(page,size,email,role));
 

@@ -23,6 +23,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+import static org.springframework.http.HttpMethod.*;
+
 @Configuration
 @RequiredArgsConstructor
 class SecurityConfiguration {
@@ -48,46 +50,56 @@ class SecurityConfiguration {
 
         security.authorizeHttpRequests(auth ->
                 auth
-                        .requestMatchers(HttpMethod.GET,"/swagger-ui.html").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/v1/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/authorities").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/changePassword").authenticated()
+                        .requestMatchers(GET,"/swagger-ui.html").permitAll()
+                        .requestMatchers(POST, "/api/v1/auth/login").permitAll()
+                        .requestMatchers(POST,"/api/v1/auth/register").permitAll()
+                        .requestMatchers(GET, "/api/v1/auth/authorities").authenticated()
+                        .requestMatchers(POST, "/api/v1/auth/changePassword").authenticated()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/api-docs/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/section/sections").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/section/section/title/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/section/sections/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/section/sections/type/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/section").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/section").hasAuthority("MODERATOR")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/section/section/id/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/article").hasAuthority("MODERATOR")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/article").hasAuthority("MODERATOR")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/article/title/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/article/id/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/article/author/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/article/section/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/article/articles").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user/users**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/user/role/add").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/user/role/remove").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/me").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user/userName/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/article/count/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/comment").hasAuthority("USER")
-                        .requestMatchers(HttpMethod.GET,"/api/v1/comment/comments").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/comment/like").authenticated()
-                        .requestMatchers(HttpMethod.GET ,"/api/v1/comment/id/**").authenticated()
-                        .requestMatchers(HttpMethod.PATCH , "/api/v1/comment/disable/**").hasAuthority("HELPER")
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/article/like").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/user").authenticated()
-                        .requestMatchers(HttpMethod.GET ,"/api/v1/user/users/email**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user/users/role**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user/users/email-role**").hasAuthority("ADMIN")
+                        .requestMatchers(POST, "/api/v1/sections").hasAuthority("ADMIN")
+                        .requestMatchers(PUT, "/api/v1/sections").hasAuthority("MODERATOR")
+                        .requestMatchers(GET, "/api/v1/sections/title/{title}").permitAll()
+                        .requestMatchers(GET, "/api/v1/sections/type/{type}").permitAll()
+                        .requestMatchers(GET, "/api/v1/sections/{id}").permitAll()
+                        .requestMatchers(GET, "/api/v1/sections").permitAll()
+
+                        // ===== ARTICLES =====
+                        .requestMatchers(POST, "/api/v1/articles").hasAuthority("MODERATOR")
+                        .requestMatchers(PUT, "/api/v1/articles").hasAuthority("MODERATOR")
+                        .requestMatchers(PATCH, "/api/v1/articles/like").authenticated()
+                        .requestMatchers(GET, "/api/v1/articles/title/{title}").permitAll()
+                        .requestMatchers(GET, "/api/v1/articles/author/{authorId}").permitAll()
+                        .requestMatchers(GET, "/api/v1/articles/section/**").permitAll()
+                        .requestMatchers(GET, "/api/v1/articles/{id}").permitAll()
+                        .requestMatchers(GET, "/api/v1/articles/count/{authorName}").authenticated()
+                        .requestMatchers(GET, "/api/v1/articles").permitAll()
+
+                        // ===== USERS =====
+                        .requestMatchers(PATCH, "/api/v1/users/role/add").hasAuthority("ADMIN")
+                        .requestMatchers(PATCH, "/api/v1/users/role/remove").hasAuthority("ADMIN")
+                        .requestMatchers(GET, "/api/v1/users/byEmail").hasAuthority("ADMIN")
+                        .requestMatchers(GET, "/api/v1/users/byRole").hasAuthority("ADMIN")
+                        .requestMatchers(GET, "/api/v1/users/byEmailRole").hasAuthority("ADMIN")
+                        .requestMatchers(GET, "/api/v1/users/username/{username}").authenticated()
+                        .requestMatchers(PUT, "/api/v1/users/{id}").authenticated()
+                        .requestMatchers(GET, "/api/v1/users").hasAuthority("ADMIN")
+
+                        // ===== COMMENTS =====
+                        .requestMatchers(POST, "/api/v1/comments").hasAuthority("USER")
+                        .requestMatchers(PATCH, "/api/v1/comments/disable/**").hasAuthority("HELPER")
+                        .requestMatchers(PATCH, "/api/v1/comments/like").authenticated()
+                        .requestMatchers(GET, "/api/v1/comments/{id}").authenticated()
+                        .requestMatchers(GET, "/api/v1/comments").permitAll()
+
+                        // ===== AUTH =====
+                        .requestMatchers(GET, "/api/v1/auth/me").authenticated()
+
+                        // ===== DEFAULT =====
+                        .anyRequest().authenticated()
         )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).httpBasic(Customizer.withDefaults())

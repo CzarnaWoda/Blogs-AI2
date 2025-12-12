@@ -20,7 +20,7 @@ import java.util.Map;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("/api/v1/comment")
+@RequestMapping("/api/v1/comments")
 @RequiredArgsConstructor
 public class CommentControllerImpl implements CommentController{
 
@@ -50,7 +50,7 @@ public class CommentControllerImpl implements CommentController{
     }
 
     @Override
-    @GetMapping("/comments")
+    @GetMapping()
     public ResponseEntity<HttpResponse> commentsByArticleId(@RequestParam long objectId, @RequestParam int page, @RequestParam int size) {
         final Page<Comment> comments = getCommentByArticleIdHandler.execute(new PageRequestObjectId(page,size,objectId));
 
@@ -66,7 +66,7 @@ public class CommentControllerImpl implements CommentController{
     }
 
     @Override
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<HttpResponse> comment(@PathVariable long id) {
         final Comment comment = getCommentByIdHandler.execute(id);
 

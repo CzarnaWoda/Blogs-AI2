@@ -25,7 +25,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("/api/v1/section")
+@RequestMapping("/api/v1/sections")
 @RequiredArgsConstructor
 class SectionControllerImpl implements SectionController{
 
@@ -39,7 +39,7 @@ class SectionControllerImpl implements SectionController{
     private final UpdateSectionByIdHandler updateSectionByIdHandler;
 
     @Override
-    @GetMapping("/sections/type/{type}")
+    @GetMapping("/type/{type}")
     public ResponseEntity<HttpResponse> sectionsByType(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size, @PathVariable String type) {
        final Page<Section> sections = getSectionsByTypeHandler.execute(new GetSectionByTypeRequest(page,size,type));
 
@@ -54,7 +54,7 @@ class SectionControllerImpl implements SectionController{
     }
 
     @Override
-    @GetMapping("/section/title/{title}")
+    @GetMapping("/title/{title}")
     public ResponseEntity<HttpResponse> sectionByTitle(@PathVariable String title) {
 
         return ResponseEntity.status(OK).body(HttpResponse.builder()
@@ -68,7 +68,7 @@ class SectionControllerImpl implements SectionController{
     }
 
     @Override
-    @GetMapping("/sections")
+    @GetMapping("")
     public ResponseEntity<HttpResponse> sections(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         final Page<Section> sections = getSectionPageHandler.execute(new PageRequest(page,size));
 
@@ -116,7 +116,7 @@ class SectionControllerImpl implements SectionController{
     }
 
     @Override
-    @GetMapping("/section/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<HttpResponse> sectionById(@PathVariable long id) {
         return ResponseEntity.status(OK).body(HttpResponse.builder()
                 .statusCode(OK.value())

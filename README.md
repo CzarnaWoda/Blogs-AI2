@@ -275,7 +275,7 @@ All endpoints return a consistent `HttpResponse` envelope:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/Blogs-AI2.git
+git clone https://github.com/CzarnaWoda/Blogs-AI2.git
 cd Blogs-AI2
 ```
 
